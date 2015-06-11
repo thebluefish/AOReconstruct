@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PstWriter", "PstWriter\PstWriter.vcproj", "{28FD94A8-0161-4E53-95FB-E36359A50EFE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestApp", "TestApp\TestApp.vcproj", "{ACE8CB91-7B51-419D-BB1E-94FEE5516249}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28FD94A8-0161-4E53-95FB-E36359A50EFE} = {28FD94A8-0161-4E53-95FB-E36359A50EFE}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28FD94A8-0161-4E53-95FB-E36359A50EFE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28FD94A8-0161-4E53-95FB-E36359A50EFE}.Debug|Win32.Build.0 = Debug|Win32
+		{28FD94A8-0161-4E53-95FB-E36359A50EFE}.Release|Win32.ActiveCfg = Release|Win32
+		{28FD94A8-0161-4E53-95FB-E36359A50EFE}.Release|Win32.Build.0 = Release|Win32
+		{ACE8CB91-7B51-419D-BB1E-94FEE5516249}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ACE8CB91-7B51-419D-BB1E-94FEE5516249}.Debug|Win32.Build.0 = Debug|Win32
+		{ACE8CB91-7B51-419D-BB1E-94FEE5516249}.Release|Win32.ActiveCfg = Release|Win32
+		{ACE8CB91-7B51-419D-BB1E-94FEE5516249}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

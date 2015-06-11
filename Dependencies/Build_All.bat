@@ -1,0 +1,1 @@
+./Urho3D/cmake_vs2013.bat ./Urho3D/Build -DURHO3D_OPENGL=1 -DURHO3D_SAMPLES=1
