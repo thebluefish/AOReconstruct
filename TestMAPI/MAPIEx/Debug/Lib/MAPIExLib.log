@@ -1,0 +1,9 @@
+﻿Build started 6/15/2015 8:37:22 AM.
+     1>Project "C:\Users\skauf1\Documents\GitHub\AOReconstruct\TestMAPI\MAPIEx\MAPIExLib.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         MAPIExLib.vcxproj -> C:\Users\skauf1\Documents\GitHub\AOReconstruct\AOReconstruct\\Lib\MAPIExLib_d.lib
+     1>Done Building Project "C:\Users\skauf1\Documents\GitHub\AOReconstruct\TestMAPI\MAPIEx\MAPIExLib.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.06

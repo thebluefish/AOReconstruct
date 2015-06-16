@@ -4,6 +4,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{96c6a47f-0666-4448-8eff-2f67a073b913}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MAPIEx">
+      <UniqueIdentifier>{3d9b5015-9a33-4530-bef7-275b2d1eb42e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -11,6 +14,8 @@
     </ClCompile>
     <ClCompile Include="src\AOHandler.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
+    <ClCompile Include="src\PSTHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main.h">
@@ -18,5 +23,9 @@
     </ClInclude>
     <ClInclude Include="src\AOHandler.h" />
     <ClInclude Include="src\MainWindow.h" />
+    <ClInclude Include="src\Utils.h" />
+    <ClInclude Include="src\PSTHandler.h" />
+    <ClInclude Include="src\PstTempl.h" />
+    <ClInclude Include="src\PSTTypes.h" />
   </ItemGroup>
 </Project>

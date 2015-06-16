@@ -14,11 +14,17 @@
     <ClCompile Include="src\AOHandler.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PSTHandler.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AOHandler.h" />
     <ClInclude Include="src\MainWindow.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\PSTHandler.h" />
+    <ClInclude Include="src\PstTempl.h" />
+    <ClInclude Include="src\PSTTypes.h" />
+    <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{32F4B212-CFA3-4379-BF82-2C8A206BFCAA}</ProjectGuid>
@@ -30,6 +36,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -37,6 +44,7 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -61,14 +69,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../Dependencies/wxWidgets/include;../../Dependencies/wxWidgets/lib/vc_lib/mswud;./src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Dependencies/wxWidgets/include;../../Dependencies/wxWidgets/lib/vc_lib/mswud;./src;C:\Office 2010 Developer Resources\Outlook 2010 MAPI Headers;../../Dependencies/zlib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;URHO3D_SSE;URHO3D_MINIDUMPS;URHO3D_FILEWATCHER;URHO3D_PROFILING;URHO3D_LOGGING;URHO3D_OPENGL;GLEW_STATIC;GLEW_NO_GLU;URHO3D_ANGELSCRIPT;URHO3D_NAVIGATION;URHO3D_NETWORK;URHO3D_PHYSICS;URHO3D_URHO2D;URHO3D_STATIC_DEFINE;_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../Dependencies/wxWidgets/lib/vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;winmm.lib;imm32.lib;version.lib;ws2_32.lib;dbghelp.lib;opengl32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;wininet.lib;wxmsw30ud_adv.lib;wxmsw30ud_core.lib;wxbase30ud.lib;wxbase30ud_net.lib;wxbase30ud_xml.lib;wxmsw30ud_richtext.lib;wxmsw30ud_xrc.lib;wxmsw30ud_propgrid.lib;wxmsw30ud_aui.lib;wxmsw30ud_ribbon.lib;wxmsw30ud_html.lib;wxmsw30ud_gl.lib;wxmsw30ud_stc.lib;wxmsw30ud_qa.lib;wxmsw30ud_webview.lib;wxmsw30ud_media.lib;wxscintillad.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../Dependencies/wxWidgets/lib/vc_lib;../../Dependencies/zlib/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;winmm.lib;imm32.lib;version.lib;ws2_32.lib;dbghelp.lib;opengl32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;wininet.lib;wxmsw30ud_adv.lib;wxmsw30ud_core.lib;wxbase30ud.lib;wxbase30ud_net.lib;wxbase30ud_xml.lib;wxmsw30ud_richtext.lib;wxmsw30ud_xrc.lib;wxmsw30ud_propgrid.lib;wxmsw30ud_aui.lib;wxmsw30ud_ribbon.lib;wxmsw30ud_html.lib;wxmsw30ud_gl.lib;wxmsw30ud_stc.lib;wxmsw30ud_qa.lib;wxmsw30ud_webview.lib;wxmsw30ud_media.lib;wxscintillad.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;mapi32.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -78,15 +86,15 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../Dependencies/wxWidgets/include;../../Dependencies/wxWidgets/lib/vc_lib/mswud;./src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Dependencies/wxWidgets/include;../../Dependencies/wxWidgets/lib/vc_lib/mswud;./src;C:\Office 2010 Developer Resources\Outlook 2010 MAPI Headers;../../Dependencies/zlib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_SECURE_SCL=0;URHO3D_SSE;URHO3D_MINIDUMPS;URHO3D_FILEWATCHER;URHO3D_PROFILING;URHO3D_LOGGING;URHO3D_OPENGL;GLEW_STATIC;GLEW_NO_GLU;URHO3D_ANGELSCRIPT;URHO3D_NAVIGATION;URHO3D_NETWORK;URHO3D_PHYSICS;URHO3D_URHO2D;URHO3D_STATIC_DEFINE;_CRT_SECURE_NO_WARNINGS;HAVE_STDINT_H;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;winmm.lib;imm32.lib;version.lib;ws2_32.lib;dbghelp.lib;opengl32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;wininet.lib;wxmsw30u_adv.lib;wxmsw30u_core.lib;wxbase30u.lib;wxbase30u_net.lib;wxbase30u_xml.lib;wxmsw30u_richtext.lib;wxmsw30u_xrc.lib;wxmsw30u_propgrid.lib;wxmsw30u_aui.lib;wxmsw30u_ribbon.lib;wxmsw30u_html.lib;wxmsw30u_gl.lib;wxmsw30u_stc.lib;wxmsw30u_qa.lib;wxmsw30u_webview.lib;wxmsw30u_media.lib;wxscintilla.lib;wxpng.lib;wxtiff.lib;wxjpeg.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../Dependencies/wxWidgets/lib/vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;winmm.lib;imm32.lib;version.lib;ws2_32.lib;dbghelp.lib;opengl32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;wininet.lib;wxmsw30u_adv.lib;wxmsw30u_core.lib;wxbase30u.lib;wxbase30u_net.lib;wxbase30u_xml.lib;wxmsw30u_richtext.lib;wxmsw30u_xrc.lib;wxmsw30u_propgrid.lib;wxmsw30u_aui.lib;wxmsw30u_ribbon.lib;wxmsw30u_html.lib;wxmsw30u_gl.lib;wxmsw30u_stc.lib;wxmsw30u_qa.lib;wxmsw30u_webview.lib;wxmsw30u_media.lib;wxscintilla.lib;wxpng.lib;wxtiff.lib;wxjpeg.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;mapi32.lib;zdll.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../Dependencies/wxWidgets/lib/vc_lib;../../Dependencies/zlib/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

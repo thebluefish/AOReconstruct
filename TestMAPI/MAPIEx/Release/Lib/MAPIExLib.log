@@ -1,0 +1,29 @@
+﻿Build started 6/15/2015 8:22:35 AM.
+     1>Project "C:\Users\skauf1\Documents\GitHub\AOReconstruct\TestMAPI\MAPIEx\MAPIExLib.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Office 2010 Developer Resources\Outlook 2010 MAPI Headers" /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /D _AFXDLL /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"MAPIExPCH.h" /Fp"Release\Lib\MAPIExLib.pch" /Fo"Release\Lib\\" /Fd"Release\Lib\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MAPIExPCH.cpp
+         MAPIExPCH.cpp
+         _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Office 2010 Developer Resources\Outlook 2010 MAPI Headers" /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /D _AFXDLL /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"MAPIExPCH.h" /Fp"Release\Lib\MAPIExLib.pch" /Fo"Release\Lib\\" /Fd"Release\Lib\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MAPIAppointment.cpp MAPIContact.cpp MAPIEx.cpp MAPIFolder.cpp MAPIMessage.cpp MAPIObject.cpp MAPISink.cpp
+         MAPIAppointment.cpp
+         MAPIContact.cpp
+         MAPIEx.cpp
+         MAPIFolder.cpp
+         MAPIMessage.cpp
+         MAPIObject.cpp
+         MAPISink.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\skauf1\Documents\GitHub\AOReconstruct\AOReconstruct\\Lib\MAPIExLib.lib" /NOLOGO /LTCG Release\Lib\MAPIAppointment.obj
+         Release\Lib\MAPIContact.obj
+         Release\Lib\MAPIEx.obj
+         Release\Lib\MAPIExPCH.obj
+         Release\Lib\MAPIFolder.obj
+         Release\Lib\MAPIMessage.obj
+         Release\Lib\MAPIObject.obj
+         Release\Lib\MAPISink.obj
+         MAPIExLib.vcxproj -> C:\Users\skauf1\Documents\GitHub\AOReconstruct\AOReconstruct\\Lib\MAPIExLib.lib
+     1>Done Building Project "C:\Users\skauf1\Documents\GitHub\AOReconstruct\TestMAPI\MAPIEx\MAPIExLib.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.72

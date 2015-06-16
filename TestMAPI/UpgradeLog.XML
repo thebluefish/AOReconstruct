@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="TestMAPI">
+</Property><Property Name="Solution File" Value="D:\Source\TestMAPI\TestMAPI.sln">
+</Property><Property Name="Date" Value="Monday, October 06, 2008">
+</Property><Property Name="Time" Value="11:18 AM">
+</Property></Properties><Event ErrorLevel="0" Project="TestMAPI" Source="TestMAPI.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="TestMAPI" Source="TestMAPI.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="TestMAPI" Source="TestMAPI.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="TestMAPI" Source="TestMAPI.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MAPIEx" Source="MAPIEx\MAPIEx.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="MAPIEx" Source="MAPIEx\MAPIEx.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="MAPIEx" Source="MAPIEx\MAPIEx.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="MAPIEx" Source="MAPIEx\MAPIEx.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="NetMAPI" Source="NetMAPI\NetMAPI.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="NetMAPI" Source="NetMAPI\NetMAPI.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="TestNetMAPI" Source="TestNetMAPI\TestNetMAPI.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="TestNetMAPI" Source="TestNetMAPI\TestNetMAPI.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MAPIExLib" Source="MAPIEx\MAPIExLib.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="MAPIExLib" Source="MAPIEx\MAPIExLib.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="MAPIExLib" Source="MAPIEx\MAPIExLib.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MAPIService" Source="MAPIService\MAPIService.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="MAPIService" Source="MAPIService\MAPIService.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="MAPIService" Source="MAPIService\MAPIService.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="MAPIService" Source="MAPIService\MAPIService.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="TestMAPI.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="TestMAPI.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="NetMAPI" Source="NetMAPI\NetMAPI.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="TestNetMAPI" Source="TestNetMAPI\TestNetMAPI.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

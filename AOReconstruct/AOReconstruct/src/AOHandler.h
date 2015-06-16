@@ -16,21 +16,22 @@
 
 namespace AOReconstruct
 {
+	wxDECLARE_EVENT(wxEVT_AOC_SCAN_FINISHED, wxThreadEvent);
+
+	class MainWindow;
 
 	class AOCFile
 	{
 	public:
-		static wxMutex s_fileMutex;
+		friend class AOScanningThread;
+		//wxCriticalSection _fileCS;
 
 	public:
-		AOCFile(const wxString& path) : _fileName(path) { Process(); };
+		AOCFile(const wxString& path) : _fileName(path) { };
 
 		const wxFileName& GetName() { return _fileName; };
 
 	public:
-
-		void Scan(wxEvtHandler* eventReceiver = 0);
-		void Process(wxEvtHandler* eventReceiver = 0);
 
 	protected:
 
@@ -41,10 +42,11 @@ namespace AOReconstruct
 	class AOCVolume
 	{
 	public:
-		static wxMutex s_volumeMutex;
+		friend class AOScanningThread;
+		
 
 	public:
-		AOCVolume(const wxString& path) : _volumeName(path) { Process(); };
+		AOCVolume(const wxString& path) : _volumeName(path) { };
 
 		const wxFileName& GetName() { return _volumeName; };
 
@@ -52,11 +54,8 @@ namespace AOReconstruct
 
 	public:
 
-		void Scan(wxEvtHandler* eventReceiver = 0);
-		void Process(wxEvtHandler* eventReceiver = 0);
-
 	protected:
-
+		//wxCriticalSection _volumeCS;
 		std::deque<AOCFile> _files;
 
 		wxFileName _volumeName;
@@ -75,6 +74,8 @@ namespace AOReconstruct
 			WXE_LAST
 		};
 
+		friend class AOScanningThread;
+
 	public:
 		AOHandler(wxEvtHandler* eventReceiver);
 		~AOHandler();
@@ -89,16 +90,11 @@ namespace AOReconstruct
 		const wxString& GetAOUserCookie() { return _aoUserCookie; };
 
 		// Folder information
-		const wxString& GetAOUsersFolde() { return _aoUsersFolder; };
-		const wxString& GetAOCurrentUserFolde() { return _aoCurrentUserFolder; };
-		const wxString& GetAOUserCacheFolder() { return _aoUserCacheFolder; };
-		const wxString& GetAOCookieFile() { return _aoCookieFile; };
+		const wxFileName& GetAOUsersFolder() { return _aoUsersFolder; };
 
 
 		// List of volumes
 		const std::deque<AOCVolume>& GetAOCVolumes() { return _volumes; };
-
-		void Scan();
 
 	protected:
 
@@ -120,34 +116,39 @@ namespace AOReconstruct
 		wxString _aoUserCookie;
 
 		// Folder information
-		wxString _aoUsersFolder;
-		wxString _aoCurrentUserFolder;
-		wxString _aoUserCacheFolder;
-		wxString _aoCookieFile;
+		wxFileName _aoUsersFolder;
+		
+		wxFileName _aoUserCacheFolder;
 
 		std::deque<AOCVolume> _volumes;
 
 	};
 
-	class AOProcessingThread : public wxThread
+	class AOScanningThread : public wxThread
 	{
 	public:
-		AOProcessingThread(wxEvtHandler* eventReceiver, AOHandler* aoHandler) : 
+		AOScanningThread(wxFileName& pstFileName, wxEvtHandler* eventReceiver, AOHandler* aoHandler) :
+			wxThread(wxTHREAD_DETACHED),
+			_pstFileName(pstFileName),
 			_eventReceiver(eventReceiver),
 			_aoHandler(aoHandler)
 			{ };
-		virtual ~AOProcessingThread() { };
+		virtual ~AOScanningThread();
 
 		// thread execution starts here
 		virtual void* Entry();
 
 		virtual void OnExit();
 
+		
+
 	protected:
 		AOHandler* _aoHandler;
 
 		// Event Handler
 		wxEvtHandler* _eventReceiver;
+
+		wxFileName _pstFileName;
 	};
 }
 
