@@ -1,7 +1,10 @@
 #include "MainWindow.h"
 
-#include "AOHandler.h"
+
 #include "Utils.h"
+#include "PSTHandler.h"
+#include "AxsOneHandler.h"
+#include "AOHandler.h"
 
 namespace AOReconstruct
 {
@@ -10,25 +13,83 @@ namespace AOReconstruct
 	wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 		EVT_THREAD(wxEVT_STATUS_UPDATE, MainWindow::OnAOScanUpdate)
 		EVT_THREAD(wxEVT_AOC_SCAN_FINISHED, MainWindow::OnAOScanFinished)
-	wxEND_EVENT_TABLE()
-
-	MainWindow::MainWindow()
-		: wxFrame(NULL, wxID_ANY, "AXS-One Reconstructor", wxPoint(0, 0), wxSize(600, 300)),
+		wxEND_EVENT_TABLE()
+		MainWindow::MainWindow()
+		: MainWindowBase(NULL, wxID_ANY, "AXS-One \"Get me out of this mess\" Tool", wxPoint(0, 0), wxSize(500, 420)),
 		_scanThread(0)
 	{
-			
-		CreateLayout();
-		Initialize();
+
+
+		_aoHandler = std::make_shared<AOHandler>(this);
+		_pstHandler = std::make_shared<PSTHandler>(this);
+		_axsOneHandler = std::make_shared<AxsOneHandler>();
+
+		_aocTree->AddRoot("Volumes");
+
+		// Setup Logging
+		SetActiveTarget(this);
+
+		// Open log file
+		_logFileHandle = std::make_shared<wxFile>();
+
+		// Make sure log directory exists
+		auto logDir = std::make_shared<wxDir>();
+
+		wxString fileNameBuilder;
+		wxFileName filePath(wxStandardPaths::Get().GetExecutablePath());
+		fileNameBuilder << filePath.GetPath() + "\\Logs";
+
+		if(!logDir->Exists(fileNameBuilder))
+		{
+			logDir->Make(fileNameBuilder);
+		}
+
+		fileNameBuilder << "\\AOReconstruct_";
+
+		wxString fullFileName;
+		for (int i = 0; i < MAXINT; i++)
+		{
+			fullFileName = "";
+			fullFileName << fileNameBuilder << i << ".log";
+
+			if (!_logFileHandle->Exists(fullFileName))
+			{
+				_logFileHandle->Create(fullFileName);
+				break;
+			}
+		}
+
+		wxLogMessage(L"Opened log file: " + fullFileName);
+		wxLogMessage(L"Application Started");
 	}
 
 	MainWindow::~MainWindow()
 	{
-		_pickerPST->Disconnect(wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler(MainWindow::_pickerPSTOnFileChanged), NULL, this);
+		wxLogMessage(L"Application Closed");
 
-		EndScanThreadSafely();
+		SetActiveTarget(NULL);
+
+		EndReconstituteThreadSafely();
+		EndRebuildThreadSafely();
 	}
 
-	void MainWindow::EndScanThreadSafely()
+	void MainWindow::SetReconstituteTabEnabled(bool enabled)
+	{
+		_newPSTPicker->Enable(enabled);
+		_newPSTPicker->SetPath(L"");
+
+		_reconstituteButton->Enable(false);
+
+	}
+	void MainWindow::SetRebuildTabEnabled(bool enabled)
+	{
+		_pickerPST->Enable(enabled);
+		_pickerPST->SetPath(L"");
+
+		_buttonRebuild->Enable(false);
+	}
+
+	void MainWindow::EndReconstituteThreadSafely()
 	{
 		{
 			wxCriticalSectionLocker enter(_scanThreadCS);
@@ -50,95 +111,70 @@ namespace AOReconstruct
 		}
 	}
 
-	void MainWindow::CreateLayout()
+	void MainWindow::EndRebuildThreadSafely()
 	{
-		this->SetSizeHints(wxDefaultSize, wxDefaultSize);
-		this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+		{
+			wxCriticalSectionLocker enter(_scanThreadCS);
 
-		///////////////////////////
-		//BEGIN AUTO-GENERATED CODE
+			if (_scanThread)
+			{
+				_scanThread->Delete();
+			}
+		}
 
-		_statusBar = this->CreateStatusBar(2, wxST_SIZEGRIP, wxID_ANY);
-		wxBoxSizer* mainSizer;
-		mainSizer = new wxBoxSizer(wxVERTICAL);
-
-		_labelSelectPST = new wxStaticText(this, wxID_ANY, wxT("Select PST to rebuild:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
-		_labelSelectPST->Wrap(-1);
-		mainSizer->Add(_labelSelectPST, 0, wxALL, 3);
-
-		_pickerPST = new wxFilePickerCtrl(this, wxID_ANY, wxEmptyString, wxT("Select a PST file"), wxT("*.pst"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE | wxFLP_FILE_MUST_EXIST | wxFLP_OPEN);
-		mainSizer->Add(_pickerPST, 0, wxALL | wxEXPAND, 3);
-
-		_lineSeparator = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
-		mainSizer->Add(_lineSeparator, 0, wxEXPAND | wxALL, 5);
-
-		wxBoxSizer* secondarySizer;
-		secondarySizer = new wxBoxSizer(wxHORIZONTAL);
-
-		_aocTree = new wxTreeCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxTR_FULL_ROW_HIGHLIGHT | wxTR_HIDE_ROOT);
-		secondarySizer->Add(_aocTree, 1, wxALL | wxEXPAND, 3);
-
-		_panelOptions = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-		wxStaticBoxSizer* sizerOptions;
-		sizerOptions = new wxStaticBoxSizer(new wxStaticBox(_panelOptions, wxID_ANY, wxT("Options")), wxVERTICAL);
-
-		m_checkBox1 = new wxCheckBox(_panelOptions, wxID_ANY, wxT("Backup Archive"), wxDefaultPosition, wxDefaultSize, 0);
-		sizerOptions->Add(m_checkBox1, 0, wxALL, 5);
-
-
-		sizerOptions->Add(0, 0, 1, wxEXPAND, 5);
-
-		_buttonRebuild = new wxButton(_panelOptions, wxID_ANY, wxT("Rebuild"), wxDefaultPosition, wxDefaultSize, 0);
-		sizerOptions->Add(_buttonRebuild, 0, wxALIGN_BOTTOM | wxALIGN_RIGHT, 3);
-
-
-		_panelOptions->SetSizer(sizerOptions);
-		_panelOptions->Layout();
-		sizerOptions->Fit(_panelOptions);
-		secondarySizer->Add(_panelOptions, 1, wxEXPAND | wxALL, 1);
-
-
-		mainSizer->Add(secondarySizer, 1, wxEXPAND, 5);
-
-
-		//END AUTO-GENERATED CODE
-		///////////////////////////
-
-		_aocTree->AddRoot("Volumes");
-
-		this->SetSizer(mainSizer);
-		this->Layout();
-
-		this->Centre(wxBOTH);
-
-		_pickerPST->Connect(wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler(MainWindow::_pickerPSTOnFileChanged), NULL, this);
-		_aocTree->Connect(wxEVT_COMMAND_TREE_ITEM_EXPANDING, wxTreeEventHandler(MainWindow::_aocTreeOnTreeItemExpanding), NULL, this);
+		while (1)
+		{
+			{ // was the ~MyThread() function executed?
+				wxCriticalSectionLocker enter(_scanThreadCS);
+				if (!_scanThread) break;
+			}
+			// wait for thread completion
+			wxThread::This()->Sleep(1);
+		}
 	}
 
-	void MainWindow::Initialize()
+	void MainWindow::OnAOScanUpdate(wxThreadEvent& event)
 	{
-		_aoHandler = std::make_shared<AOHandler>(this);
-		
+		auto aoUpdateEvent = static_cast<StatusUpdateEvent&>(event);
+
+		_statusBar->SetStatusText(aoUpdateEvent.updateString, 1);
 	}
 
-	void MainWindow::_pickerPSTOnFileChanged(wxFileDirPickerEvent& event)
+	void MainWindow::OnAOScanFinished(wxThreadEvent& event)
 	{
-		EndScanThreadSafely();
+		//EndScanThreadSafely();
 
-		wxFileName pstFileName = event.GetPath();
+		wxLogMessage(L"Volume scan finished");
 
-		// Clear the TreeView
+		_statusBar->SetStatusText("Parsing data");
+		_statusBar->SetStatusText("Updating...", 1);
+
 		auto treeRoot = _aocTree->GetRootItem();
-		_aocTree->DeleteChildren(treeRoot);
 
-		_scanThread = new AOScanningThread(pstFileName, this, _aoHandler.get());
-		_scanThread->Run();
+		auto& volumes = _aoHandler->GetAOCVolumes();
+		for each (AOCVolume vol in volumes)
+		{
+			wxFileName volumeName = vol.GetName();
 
-		std::string path(pstFileName.GetFullPath());
-		std::string password("skauf1skauf1@NIKEskauf1_Cache.pst");
-		std::string storeName("skauf1_Cache");
+			wxString itemName = volumeName.GetFullName();
+			itemName << " (" << vol.GetAOCFiles().size() << ")";
 
-		//_pstHandler = std::make_shared<PSTHandler>(path, password, Utils::string2wstring(storeName));
+			auto treeVolItem = _aocTree->AppendItem(treeRoot, itemName);
+			_aocTree->SetItemData(treeVolItem, new AOCTreeItemData());
+
+			if (vol.GetAOCFiles().size() > 0)
+			{
+				_aocTree->SetItemHasChildren(treeVolItem, true);
+			}
+			//for each (AOCFile file in aocFiles)
+			//{
+			//	wxFileName name = file.GetName();
+			//	auto treeAOCItem = _aocTree->AppendItem(treeVolItem, name.GetFullName());
+			//}
+		}
+
+		_statusBar->SetStatusText("Finished Scan");
+		_statusBar->SetStatusText("", 1);
 	}
 
 	void MainWindow::_aocTreeOnTreeItemExpanding(wxTreeEvent& event)
@@ -176,41 +212,109 @@ namespace AOReconstruct
 		itemData->hasBeenPopulated = true;
 	}
 
-	void MainWindow::OnAOScanUpdate(wxThreadEvent& event)
+	void MainWindow::_newPSTPickerOnFileChanged(wxFileDirPickerEvent& event)
 	{
-		auto aoUpdateEvent = static_cast<StatusUpdateEvent&>(event);
+		EndReconstituteThreadSafely();
 
-		_statusBar->SetStatusText(aoUpdateEvent.updateString, aoUpdateEvent.statusBarIndex);
+		wxFileName pstFileName = event.GetPath();
+
+		_reconstituteButton->Enable(true);
 	}
 
-	void MainWindow::OnAOScanFinished(wxThreadEvent& event)
+	void MainWindow::_disableAxsOneButtonOnButtonClick(wxCommandEvent& event)
 	{
-		//EndScanThreadSafely();
+		
+	}
 
-		_statusBar->SetStatusText("Parsing data", 0);
-		_statusBar->SetStatusText("Updating...", 1);
+	void MainWindow::_reconstituteButtonOnButtonClick(wxCommandEvent& event)
+	{
+		_newPSTPicker->Enable(false);
+		_reconstituteButton->Enable(false);
+		SetRebuildTabEnabled(false);
 
+	}
+
+	void MainWindow::_pickerPSTOnFileChanged(wxFileDirPickerEvent& event)
+	{
+		EndRebuildThreadSafely();
+
+		wxFileName pstFileName = event.GetPath();
+
+		// Clear the TreeView
 		auto treeRoot = _aocTree->GetRootItem();
-
-		auto& volumes = _aoHandler->GetAOCVolumes();
-		for each (AOCVolume vol in volumes)
+		if (treeRoot)
 		{
-			wxFileName name = vol.GetName();
-			auto treeVolItem = _aocTree->AppendItem(treeRoot, name.GetFullName());
-			_aocTree->SetItemData(treeVolItem, new AOCTreeItemData());
-
-			if (vol.GetAOCFiles().size() > 0)
-			{
-				_aocTree->SetItemHasChildren(treeVolItem, true);
-			}
-			//for each (AOCFile file in aocFiles)
-			//{
-			//	wxFileName name = file.GetName();
-			//	auto treeAOCItem = _aocTree->AppendItem(treeVolItem, name.GetFullName());
-			//}
+			_aocTree->DeleteChildren(treeRoot);
 		}
+		
 
-		_statusBar->SetStatusText("Finished Scan", 0);
-		_statusBar->SetStatusText("", 1);
+		_buttonRebuild->Enable(true);
+
+		_scanThread = new AOScanningThread(pstFileName, this, _aoHandler.get());
+		_scanThread->Run();
+
+		//std::string path(pstFileName.GetFullPath());
+		//std::string password("skauf1skauf1@NIKEskauf1_Cache.pst");
+		//std::string storeName("skauf1_Cache");
+
+		//_pstHandler = std::make_shared<PSTHandler>(path, password, Utils::string2wstring(storeName));
+	}
+
+	void MainWindow::_buttonRebuildOnButtonClick(wxCommandEvent& event)
+	{
+		_pickerPST->Enable(false);
+		_buttonRebuild->Enable(false);
+		SetReconstituteTabEnabled(false);
+		
+	}
+
+
+	void MainWindow::DoLogRecord(wxLogLevel level, const wxString& msg, const wxLogRecordInfo& info)
+	{
+		wxString logRecord;
+
+		wxDateTime time(info.timestamp);
+		
+		// Build log
+		// Format: [DD-MM-YYYY] LEVEL: MESSAGE
+		logRecord << time.Format("[%Y-%m-%d %H:%M:%S] ");
+
+		switch (level)
+		{
+		case wxLOG_FatalError:
+			logRecord << L"Fatal Error: ";
+			break;
+		case wxLOG_Error:
+			logRecord << L"Error: ";
+			break;
+		case wxLOG_Warning:
+			logRecord << L"Warning: ";
+			break;
+		case wxLOG_Message:
+			logRecord << L"Message: ";
+			break;
+		case wxLOG_Status:
+			logRecord << L"Status: ";
+			break;
+		case wxLOG_Info:
+			logRecord << L"Info: ";
+			break;
+		case wxLOG_Debug:
+			logRecord << L"Debug: ";
+			break;
+		case wxLOG_Trace:
+			logRecord << L"Trace: ";
+			break;
+		}
+		logRecord << msg << "\r\n";
+
+		// Send the log to the log textbox
+		_logTextbox->AppendText(logRecord);
+
+		// Send the log to our log file
+		if (_logFileHandle->IsOpened())
+		{
+			_logFileHandle->Write(logRecord);
+		}
 	}
 }

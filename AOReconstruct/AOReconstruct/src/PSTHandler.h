@@ -8,6 +8,8 @@
 
 #include "PSTTypes.h"
 
+class wxEvtHandler;
+
 namespace AOReconstruct
 {
 	class PSTHandler
@@ -15,7 +17,9 @@ namespace AOReconstruct
 	public:
 
 	public:
-		PSTHandler(const std::string& path, const std::string& password, const std::wstring& storeDisplayName);
+		//PSTHandler(const std::string& path, const std::string& password, const std::wstring& storeDisplayName, wxEvtHandler* eventReceiver);
+
+		PSTHandler(wxEvtHandler* eventReceiver);
 		~PSTHandler();
 
 
@@ -24,6 +28,9 @@ namespace AOReconstruct
 		void Initialize();
 
 	protected:
+		// Event Handler
+		wxEvtHandler* _eventReceiver;
+
 		std::wstring _filePath;
 
 		IPF_t m_IPF;

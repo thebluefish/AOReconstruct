@@ -12,15 +12,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AOHandler.cpp" />
+    <ClCompile Include="src\AxsOneHandler.cpp" />
     <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainWindowBase.cpp" />
     <ClCompile Include="src\PSTHandler.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AOHandler.h" />
+    <ClInclude Include="src\AxsOneHandler.h" />
     <ClInclude Include="src\MainWindow.h" />
     <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\MainWindowBase.h" />
     <ClInclude Include="src\PSTHandler.h" />
     <ClInclude Include="src\PstTempl.h" />
     <ClInclude Include="src\PSTTypes.h" />

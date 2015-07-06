@@ -7,25 +7,66 @@
     <Filter Include="MAPIEx">
       <UniqueIdentifier>{3d9b5015-9a33-4530-bef7-275b2d1eb42e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Handlers">
+      <UniqueIdentifier>{4544379b-215d-46ab-83c3-0449a0bd3297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Handlers\PSTHandler">
+      <UniqueIdentifier>{e4da04a3-ff7d-427c-b8f2-c4e972718033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Forms">
+      <UniqueIdentifier>{e9528442-4faa-4531-bb25-7840e1bac569}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\AOHandler.cpp" />
-    <ClCompile Include="src\MainWindow.cpp" />
-    <ClCompile Include="src\Utils.cpp" />
-    <ClCompile Include="src\PSTHandler.cpp" />
+    <ClCompile Include="src\AOHandler.cpp">
+      <Filter>Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AxsOneHandler.cpp">
+      <Filter>Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PSTHandler.cpp">
+      <Filter>Handlers\PSTHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainWindow.cpp">
+      <Filter>Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainWindowBase.cpp">
+      <Filter>Forms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\AOHandler.h" />
-    <ClInclude Include="src\MainWindow.h" />
-    <ClInclude Include="src\Utils.h" />
-    <ClInclude Include="src\PSTHandler.h" />
-    <ClInclude Include="src\PstTempl.h" />
-    <ClInclude Include="src\PSTTypes.h" />
+    <ClInclude Include="src\AOHandler.h">
+      <Filter>Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AxsOneHandler.h">
+      <Filter>Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PSTHandler.h">
+      <Filter>Handlers\PSTHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PstTempl.h">
+      <Filter>Handlers\PSTHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PSTTypes.h">
+      <Filter>Handlers\PSTHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainWindow.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainWindowBase.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

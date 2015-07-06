@@ -1,74 +1,53 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
+#include "MainWindowBase.h"
 
-
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/statusbr.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/filepicker.h>
-#include <wx/statline.h>
-#include <wx/treectrl.h>
-#include <wx/checkbox.h>
-#include <wx/button.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/notebook.h>
-#include <wx/frame.h>
-
-
+#include <wx/datetime.h>
+#include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/log.h>
+#include <wx/stdpaths.h>
+
 
 #include <memory>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 
-#include "PSTHandler.h"
 
 namespace AOReconstruct
 {
 	wxDECLARE_EVENT(wxEVT_STATUS_UPDATE, wxThreadEvent);
 
 	class AOHandler;
+	class PSTHandler;
+	class AxsOneHandler;
 
 	class StatusUpdateEvent : public wxThreadEvent
 	{
 	public:
-		StatusUpdateEvent(wxString updateString, int index = 0) :
+		StatusUpdateEvent(wxString updateString) :
 			wxThreadEvent(wxEVT_THREAD, wxEVT_STATUS_UPDATE),
-			updateString(updateString),
-			statusBarIndex(index)
+			updateString(updateString)
 		{ };
 
 		virtual wxEvent *Clone() const { return new StatusUpdateEvent(*this); }
 
 		wxString updateString;
-		int statusBarIndex;
 	};
 
 	class AOCTreeItemData : public wxTreeItemData
 	{
 	public:
 		AOCTreeItemData() : wxTreeItemData(),
-			hasBeenPopulated(false)
-		{
-
-		};
-
+			hasBeenPopulated(false) { };
 		~AOCTreeItemData() { };
 
 		bool hasBeenPopulated;
 	};
 
-	class MainWindow : public wxFrame
+	class MainWindow : public MainWindowBase, public wxLog
 	{
 	public:
 
@@ -88,45 +67,51 @@ namespace AOReconstruct
 		MainWindow();
 		~MainWindow();
 
+	// Internal functions
 	protected:
 
-		void EndScanThreadSafely();
+		void SetReconstituteTabEnabled(bool enabled);
+		void SetRebuildTabEnabled(bool enabled);
 
-		void CreateLayout();
-		void Initialize();
+		void EndReconstituteThreadSafely();
+		void EndRebuildThreadSafely();
 
+	// Our events
 	protected:
 
 		void OnAOScanUpdate(wxThreadEvent& event);
 		void OnAOScanFinished(wxThreadEvent& event);
 
-		void _pickerPSTOnFileChanged(wxFileDirPickerEvent& event);
 		void _aocTreeOnTreeItemExpanding(wxTreeEvent& event);
+
+	// Overidden events
+	protected:
+
+		// Reconstitute Tab
+		virtual void _newPSTPickerOnFileChanged(wxFileDirPickerEvent& event) override;
+		virtual void _disableAxsOneButtonOnButtonClick(wxCommandEvent& event) override;
+		virtual void _reconstituteButtonOnButtonClick(wxCommandEvent& event) override;
+
+		// Rebuild Tab
+		virtual void _pickerPSTOnFileChanged(wxFileDirPickerEvent& event) override;
+		virtual void _buttonRebuildOnButtonClick(wxCommandEvent& event) override;
+
+		// Logging
+		virtual void DoLogRecord(wxLogLevel level, const wxString& msg, const wxLogRecordInfo& info) override;
+
 
 	private:
 		// Handlers
 		std::shared_ptr<AOHandler> _aoHandler;
 		std::shared_ptr<PSTHandler> _pstHandler;
+		std::shared_ptr<AxsOneHandler> _axsOneHandler;
+
+		std::shared_ptr<wxFile> _logFileHandle;
+
 		// Threading
 		AOScanningThread* _scanThread;
 		
 		// UI Elements
-
-		///////////////////////////
-		//BEGIN AUTO-GENERATED CODE
-		
-		wxStatusBar* _statusBar;
-		wxStaticText* _labelSelectPST;
-		wxFilePickerCtrl* _pickerPST;
-		wxStaticLine* _lineSeparator;
-		wxTreeCtrl* _aocTree;
-		wxPanel* _panelOptions;
-		wxCheckBox* m_checkBox1;
-		wxButton* _buttonRebuild;
-
-		//END AUTO-GENERATED CODE
-		///////////////////////////
-
 		wxTreeItemId _rootItem;
 
 		

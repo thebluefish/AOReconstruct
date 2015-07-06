@@ -8,7 +8,6 @@
 #include <wx/filename.h>
 #include <wx/thread.h>
 #include <wx/event.h> 
-
 #include <wx/msw/registry.h>
 
 #include <memory>
@@ -81,9 +80,9 @@ namespace AOReconstruct
 		~AOHandler();
 
 		// User Information
-		const wxString& GetUserName() { return _userName; };
-		const wxString& GetUserProfile() { return _userProfile; };
-		const wxString& GetUserDomain() { return _userDomain; };
+		const wxString& GetAOUserName() { return _userName; };
+		const wxString& GetAOUserProfile() { return _userProfile; };
+		const wxString& GetAOUserDomain() { return _userDomain; };
 
 		// AXSOne Information
 		const wxString& GetAOUserString() { return _aoUserString; };

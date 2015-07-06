@@ -1,4 +1,4 @@
-#include "PSTHandler.h"
+
 
 #include "Utils.h"
 #include "PSTTypes.h"
@@ -7,6 +7,9 @@
 #include <mapiutil.h>
 #include <Mapidefs.h>
 #include <mspst.h>
+
+#include "PSTHandler.h"
+
 
 namespace AOReconstruct
 {
@@ -42,7 +45,8 @@ namespace AOReconstruct
 
 	int MapiInitializer::m_refCounter = 0;
 
-	PSTHandler::PSTHandler(const std::string &path, const std::string& password, const std::wstring &storeDisplayName)
+	/*PSTHandler::PSTHandler(const std::string &path, const std::string& password, const std::wstring &storeDisplayName, wxEvtHandler* eventReceiver) :
+		_eventReceiver(eventReceiver)
 	{
 		MapiInitializer::Init();
 
@@ -55,7 +59,8 @@ namespace AOReconstruct
 		hr = MAPIAdminProfiles(0, &m_pIProfAdmin);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("Can't AdminProfiles");
+			//auto event = new StatusUpdateEvent("Can't AdminProfiles", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 
 		// Creating profile
@@ -63,14 +68,16 @@ namespace AOReconstruct
 		hr = m_pIProfAdmin->CreateProfile((LPTSTR)&m_profileName, NULL, 0, 0);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("Can't CreateProfile");
+			//auto event = new StatusUpdateEvent("Can't CreateProfile", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 
 		// Get a service administration object.
 		hr = m_pIProfAdmin->AdminServices((LPTSTR)&m_profileName, 0, 0, 0, &m_pSvcAdmin);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("Can't AdminServices");
+			//auto event = new StatusUpdateEvent("Can't AdminServices", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 		char *pszMsgService = "";
 
@@ -80,70 +87,17 @@ namespace AOReconstruct
 		}
 		else
 		{
-			throw std::runtime_error("Error while creating Message Service (MSUPST MS). Probably Outllok 2007 or later was not installed");
+			//auto event = new StatusUpdateEvent("Error while creating Message Service (MSUPST MS). Probably Outllok 2007 or later was not installed", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 
 		// Configure the MS Personal Information Store per NewPST entries.
 		hr = m_pSvcAdmin->GetMsgServiceTable(0, &m_ptblSvc);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("GetMsgServiceTable failed");
+			//auto event = new StatusUpdateEvent("GetMsgServiceTable failed", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
-
-		//hr = MAPILogonEx(0, m_profileName, NULL, MAPI_NEW_SESSION | MAPI_NO_MAIL | MAPI_EXTENDED | MAPI_TIMEOUT_SHORT, &m_pses);
-		//if (FAILED(hr))
-		//{
-		//	throw std::runtime_error("MAPILogonEx failed");
-		//}
-
-		//LPSRowSet pRows = NULL;
-		//const int nProperties = 2;
-		//SizedSPropTagArray(nProperties, Columns) = { nProperties, { PR_DISPLAY_NAME_A, PR_RESOURCE_TYPE } };
-
-		//IMAPITable*	pStatusTable;
-		//if (m_pses->GetStatusTable(0, &pStatusTable) == S_OK)
-		//{
-		//	if (pStatusTable->SetColumns((LPSPropTagArray)&Columns, 0) == S_OK)
-		//	{
-		//		while (pStatusTable->QueryRows(1, 0, &pRows) == S_OK)
-		//		{
-		//			//if (pRows->cRows != 1) FreeProws(pRows);
-		//			//else if (pRows->aRow[0].lpProps[1].Value.ul == MAPI_SUBSYSTEM)
-		//			//{
-		//			//	
-		//			if (pRows->aRow->lpProps[1].ulPropTag == PR_SERVICE_UID)
-		//			{
-		//				// Configuring PST Message Store
-		//				ULONG count = 0;
-		//				const ULONG nMAXProps = 2;
-		//				SPropValue   rgval[nMAXProps];
-
-		//				rgval[count].ulPropTag = PR_DISPLAY_NAME_W;
-		//				rgval[count].Value.lpszW = const_cast<wchar_t*>(storeDisplayName.c_str());
-		//				++count;
-
-		//				rgval[count].ulPropTag = PR_PST_PATH;
-		//				rgval[count].Value.lpszA = const_cast<char*>(path.c_str());
-		//				++count;
-
-		//				hr = m_pSvcAdmin->ConfigureMsgService(&m_MsgStoreUID, 0, 0, count, rgval);
-
-		//				if (FAILED(hr))
-		//				{
-		//					throw std::runtime_error("Can't configure PST message store (ConfigureMsgService)");
-		//				}
-
-		//				FreeProws(pRows);
-		//			}
-		//			else
-		//			{
-		//				FreeProws(pRows);
-		//				continue;
-		//			}
-		//		}
-		//	}
-		//	pStatusTable->Release();
-		//}
 
 		COM::AutoPtr<SRowSet, RowEraser> prows;
 		COM::AutoPtr<SRowSet, RowEraser> pRows;
@@ -156,7 +110,8 @@ namespace AOReconstruct
 		hr = HrQueryAllRows(m_ptblSvc, (LPSPropTagArray)&ptaSvc, NULL, NULL, 0, &pRows);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("HrQueryAllRows failed");
+			//auto event = new StatusUpdateEvent("HrQueryAllRows failed", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 
 		int cRows = pRows->cRows;
@@ -165,7 +120,8 @@ namespace AOReconstruct
 		{
 			if (pRow->lpProps[iSvcUID].ulPropTag != PR_SERVICE_UID)
 			{
-				throw std::exception("Wrong property tag for service ID");
+				//auto event = new StatusUpdateEvent("Wrong property tag for service ID", 1);
+				//wxQueueEvent(_eventReceiver, event);
 			}
 			m_MsgStoreUID = *((LPMAPIUID)pRow->lpProps[iSvcUID].Value.bin.lpb);
 			if (strcmp(pRow->lpProps[iSvcName].Value.lpszA, pszMsgService) == 0)
@@ -181,8 +137,7 @@ namespace AOReconstruct
 
 				rgval[count].ulPropTag = PR_PST_PATH;
 				rgval[count].Value.lpszA = const_cast<char*>(path.c_str());
-				++count;
-				long thang = PR_PST_PW_SZ_OLD;
+
 				//rgval[count].ulPropTag = PR_PST_PW_SZ_OLD;
 				//rgval[count].Value.lpszA = const_cast<char*>(password.c_str());
 				//++count;
@@ -204,16 +159,19 @@ namespace AOReconstruct
 					{
 						if (lpMAPIError->ulContext == MAPI_E_FAILONEPROVIDER || lpMAPIError->ulContext == 0x30060401)
 						{
-							throw std::runtime_error("Failed to logon - Incorrect password");
+							//auto event = new StatusUpdateEvent("Failed to logon - Incorrect password", 1);
+							//wxQueueEvent(_eventReceiver, event);
 						}
 						else
 						{
-							throw std::runtime_error("Failed to logon - Unknown reason");
+							//auto event = new StatusUpdateEvent("Failed to logon - Unknown reason", 1);
+							//wxQueueEvent(_eventReceiver, event);
 						}
 					}
 					else
 					{
-						throw std::runtime_error("Can't configure PST message store (ConfigureMsgService)");
+						//auto event = new StatusUpdateEvent("Can't configure PST message store (ConfigureMsgService)", 1);
+						//wxQueueEvent(_eventReceiver, event);
 					}
 				}
 			}
@@ -222,20 +180,24 @@ namespace AOReconstruct
 		hr = MAPILogonEx(0, m_profileName, NULL, MAPI_NEW_SESSION | MAPI_EXTENDED | MAPI_NO_MAIL | MAPI_TIMEOUT_SHORT, &m_pses);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("MAPILogonEx failed");
+			//auto event = new StatusUpdateEvent("MAPILogonEx failed", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
 
 		MapiTable ptable;
 		hr = m_pses->GetMsgStoresTable(0, &ptable);
 		if (FAILED(hr))
 		{
-			throw std::runtime_error("GetMsgStoresTable failed");
+			//auto event = new StatusUpdateEvent("GetMsgStoresTable failed", 1);
+			//wxQueueEvent(_eventReceiver, event);
 		}
+	}*/
 
-		
+	PSTHandler::PSTHandler(wxEvtHandler* eventReceiver) :
+		_eventReceiver(eventReceiver)
+	{
+
 	}
-
-
 	PSTHandler::~PSTHandler()
 	{
 
